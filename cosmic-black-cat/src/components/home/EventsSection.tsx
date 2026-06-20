@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { RefObject } from 'react';
 import Link from 'next/link';
 import { useScrollReveal } from '@/lib/useScrollReveal';
 import { CatDivider } from '@/components/ui/CosmicCat';
@@ -15,7 +15,7 @@ export function EventsSection() {
       className="py-24 px-4 sm:px-6 lg:px-8 bg-[var(--deep)]"
       aria-labelledby="events-heading"
     >
-      <div className="max-w-5xl mx-auto" ref={ref}>
+      <div className="max-w-5xl mx-auto" ref={ref as React.RefObject<HTMLDivElement>}>
 
         {/* ── Header ── */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12 reveal">
