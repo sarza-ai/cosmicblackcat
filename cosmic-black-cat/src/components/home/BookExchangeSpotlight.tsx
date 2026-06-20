@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { RefObject } from 'react';
 import Link from 'next/link';
 import { useScrollReveal } from '@/lib/useScrollReveal';
 
@@ -45,7 +45,7 @@ export function BookExchangeSpotlight() {
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(201,168,76,0.3)] to-transparent" aria-hidden="true" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(201,168,76,0.3)] to-transparent" aria-hidden="true" />
 
-      <div className="max-w-6xl mx-auto relative z-10" ref={ref}>
+      <div className="max-w-6xl mx-auto relative z-10" ref={ref as React.RefObject<HTMLDivElement>}>
 
         {/* ── Header ── */}
         <div className="flex flex-col items-center text-center mb-16">
