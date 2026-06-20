@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { RefObject } from 'react';
 import Link from 'next/link';
 import { useScrollReveal } from '@/lib/useScrollReveal';
 import { CatDivider } from '@/components/ui/CosmicCat';
@@ -14,7 +14,7 @@ export function IntentionGrid() {
       className="py-24 px-4 sm:px-6 lg:px-8 bg-[var(--deep)]"
       aria-labelledby="intentions-heading"
     >
-      <div className="max-w-7xl mx-auto" ref={ref}>
+      <div className="max-w-7xl mx-auto" ref={ref as React.RefObject<HTMLDivElement>}>
 
         {/* ── Section header ── */}
         <div className="flex flex-col items-center text-center mb-16 reveal">
