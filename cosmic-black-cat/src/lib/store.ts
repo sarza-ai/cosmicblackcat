@@ -7,21 +7,15 @@ import type { Product, CartItem } from '@/types';
 interface CartStore {
   items: CartItem[];
   isOpen: boolean;
-  wishlist: string[]; // product IDs
-
-  // Cart actions
+  wishlist: string[];
   addItem: (product: Product) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
   openCart: () => void;
   closeCart: () => void;
-
-  // Wishlist actions
   toggleWishlist: (productId: string) => void;
   isWishlisted: (productId: string) => boolean;
-
-  // Derived
   totalItems: () => number;
   subtotal: () => number;
 }
@@ -36,7 +30,6 @@ export const useCartStore = create<CartStore>()(
       addItem: (product) => {
         const items = get().items;
         const existing = items.find((i) => i.product.id === product.id);
-
         if (existing) {
           set({
             items: items.map((i) =>
@@ -65,7 +58,7 @@ export const useCartStore = create<CartStore>()(
           items: state.items.map((i) =>
             i.product.id === productId ? { ...i, quantity } : i
           ),
-        }))
+        }));
       },
 
       clearCart: () => set({ items: [] }),
@@ -80,15 +73,8 @@ export const useCartStore = create<CartStore>()(
         })),
 
       isWishlisted: (productId) => get().wishlist.includes(productId),
-
-      totalItems: () =>
-        get().items.reduce((sum, item) => sum + item.quantity, 0),
-
-      subtotal: () =>
-        get().items.reduce(
-          (sum, item) => sum + item.product.price * item.quantity,
-          0
-        ),
+      totalItems: () => get().items.reduce((sum, item) => sum + item.quantity, 0),
+      subtotal: () => get().items.reduce((sum, item) => sum + item.product.price * item.quantity, 0),
     }),
     {
       name: 'cbc-cart',
