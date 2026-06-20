@@ -31,7 +31,7 @@ export function FeaturedProducts() {
       className="py-24 px-4 sm:px-6 lg:px-8 bg-[var(--void)]"
       aria-labelledby="featured-heading"
     >
-      <div className="max-w-7xl mx-auto" ref={ref}>
+      <div className="max-w-7xl mx-auto" ref={ref as React.RefObject<HTMLDivElement>}>
 
         {/* ── Section header ── */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 reveal">
