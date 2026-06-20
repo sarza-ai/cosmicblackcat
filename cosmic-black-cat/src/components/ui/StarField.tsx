@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { prefersReducedMotion } from '@/lib/utils';
 
 interface Star {
   x: number;
@@ -16,9 +15,9 @@ interface Star {
 const LAYER_SPEEDS = [0.15, 0.35, 0.6];
 const LAYER_COUNTS = [60, 80, 40];
 const STAR_COLORS = [
-  'rgba(192,200,216,', // silver
-  'rgba(185,158,232,', // lavender
-  'rgba(201,168,76,',  // gold
+  'rgba(192,200,216,',
+  'rgba(185,158,232,',
+  'rgba(201,168,76,',
 ];
 
 function randomRange(min: number, max: number) {
@@ -27,7 +26,7 @@ function randomRange(min: number, max: number) {
 
 function createStars(w: number, h: number): Star[] {
   const stars: Star[] = [];
-  for (let layer = 0 as 0 | 1 | 2; layer <= 2; layer++) {
+  for (let layer = 0; layer <= 2; layer++) {
     for (let i = 0; i < LAYER_COUNTS[layer]; i++) {
       stars.push({
         x: randomRange(0, w),
@@ -53,7 +52,7 @@ export function StarField({ className = '' }: { className?: string }) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const reduced = prefersReducedMotion();
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let w = canvas.offsetWidth;
     let h = canvas.offsetHeight;
     canvas.width = w * devicePixelRatio;
@@ -61,9 +60,8 @@ export function StarField({ className = '' }: { className?: string }) {
     ctx.scale(devicePixelRatio, devicePixelRatio);
 
     let stars = createStars(w, h);
-
-    // Scroll offset per layer (parallax)
     let scrollY = 0;
+
     const handleScroll = () => { scrollY = window.scrollY; };
     window.addEventListener('scroll', handleScroll, { passive: true });
 
@@ -78,33 +76,24 @@ export function StarField({ className = '' }: { className?: string }) {
     window.addEventListener('resize', handleResize);
 
     function draw() {
+      if (!ctx) return;
       ctx.clearRect(0, 0, w, h);
 
       for (const s of stars) {
-        // Parallax shift
-        const parallaxY = reduced
-          ? 0
-          : (scrollY * LAYER_SPEEDS[s.layer] * 0.3) % h;
+        const parallaxY = reduced ? 0 : (scrollY * LAYER_SPEEDS[s.layer] * 0.3) % h;
 
-        // Twinkle
         if (!reduced) {
           s.alpha += s.speed * s.alphaDir;
           if (s.alpha >= 0.9 || s.alpha <= 0.05) s.alphaDir *= -1;
         }
 
-        const color = STAR_COLORS[s.layer === 2 && Math.random() > 0.85 ? 1 : 0];
+        const colorIndex = (s.layer === 2 && Math.random() > 0.85) ? 1 : 0;
+        const color = STAR_COLORS[colorIndex];
         ctx.beginPath();
-        ctx.arc(
-          s.x,
-          ((s.y - parallaxY + h) % h),
-          s.r,
-          0,
-          Math.PI * 2
-        );
+        ctx.arc(s.x, ((s.y - parallaxY + h) % h), s.r, 0, Math.PI * 2);
         ctx.fillStyle = `${color}${s.alpha.toFixed(2)})`;
         ctx.fill();
 
-        // Occasional gold cross-sparkle for larger stars
         if (s.layer === 2 && s.alpha > 0.7) {
           ctx.strokeStyle = `rgba(201,168,76,${(s.alpha * 0.3).toFixed(2)})`;
           ctx.lineWidth = 0.5;
